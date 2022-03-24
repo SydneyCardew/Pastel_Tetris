@@ -1,6 +1,6 @@
-#PASTEL TETRIS
+# PASTEL TETRIS
 
-#####A Tetris clone by Sydney Cardew
+##### A Tetris clone by Sydney Cardew
 
 ---
 
