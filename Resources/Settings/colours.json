@@ -1,6 +1,12 @@
 {
+  "light_blue":[109, 207, 246],
+  "light_green":[172, 211, 115],
   "magenta":[234, 60, 163],
+  "dark_magenta":[181, 61, 133],
   "lighter_orange":[252, 240, 225],
+  "strong_peach":[242, 109, 125],
   "light_pink":[247, 182, 212],
-  "violet":[191, 144, 193]
+  "teal":[130, 202, 156],
+  "violet":[191, 144, 193],
+  "dark_violet":[133, 96, 168]
 }
