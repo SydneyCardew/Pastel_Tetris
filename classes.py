@@ -1,30 +1,36 @@
+import functions as f
+
 
 class tetronimo:
     """the basic tetronimo object"""
     def __init__(self, origin, type, rotation):
+        pieces = f.get_pieces()
+        values = f.get_values()
         self.type = type
+        self.value = values[self.type]
         self.position = origin
         self.rotation = rotation
-
-    def move(self, direction, fixed_table):
-        x = self.position[0]
-        y = self.position[1]
-        current_position = self.position
-        if direction == 'down':
-            new_position = [x, y + 1]
-        elif direction == 'left':
-            new_position = [x - 1, y]
-        elif direction == 'right':
-            new_position = [x + 1, y]
-        if fixed_table[new_position[0]][new_position[1]] or y > 20:
-            fixed_table = self.kill_tetronimo([x, y], fixed_table)
-            new_position = None
-        return (fixed_table, new_position)
+        self.absolute_pattern = pieces[self.type]
+        self.pattern = self.rotated_pattern()
+        self.get_sizes()
 
     def update(self, new_position):
         self.position = new_position
 
-    def kill_tetronimo(self, position, fixed_table):
-        fixed_table[position[0]][position[1]][0] = True
-        fixed_table[position[0]][position[1]][1] = self.type
-        return fixed_table
+    def rotate(self):
+        self.rotation += 1
+        if self.rotation >= 4:
+            self.rotation = 0
+        self.pattern = self.rotated_pattern()
+        self.get_sizes()
+
+    def rotated_pattern(self):
+        pattern = self.absolute_pattern
+        for x in range(self.rotation):
+            list(zip(*pattern[::-1]))
+        return pattern
+
+    def get_sizes(self):
+        self.right_size = len(self.pattern[0])
+        self.down_size = len(self.pattern)
+
