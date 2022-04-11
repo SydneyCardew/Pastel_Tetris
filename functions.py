@@ -88,10 +88,11 @@ def draw_background(width, height, config, next_tet, score, level):
     background_colour = config['DEFAULT']['background']
     frame_colour = config['DEFAULT']['frames']
     play_colour = config['DEFAULT']['play_window']
+    text_colour = config['DEFAULT']['text_colour']
     # font initialisation
     pg.font.init()
-    display_font = pg.font.SysFont('Courier', 20)
-    score_font = pg.font.SysFont('Courier', 15)
+    display_font = pg.font.SysFont('Corbel', 20)
+    score_font = pg.font.SysFont('Corbel', 15)
     # draws the background
     background = pg.Surface((width, height))
     background.fill(colours[background_colour])
@@ -99,9 +100,9 @@ def draw_background(width, height, config, next_tet, score, level):
     pg.draw.rect(background, colours[play_colour], pg.Rect(30, 30, 300, 600))
     pg.draw.rect(background, colours[frame_colour], pg.Rect(350, 60, 160, 180))
     # draws the fixed text
-    next_tetronimo_text = display_font.render('Next Piece:', False, (255, 255, 255))
+    next_tetronimo_text = display_font.render('Next Piece:', False, (text_colour))
     background.blit(next_tetronimo_text, (350, 30))
-    score_text = display_font.render('Score:', False, (255, 255, 255))
+    score_text = display_font.render('Score:', False, (text_colour))
     background.blit(score_text, (350, 260))
     # draws the next tetronimo
     next_pattern = next_tet_pattern(next_tet)
@@ -118,7 +119,7 @@ def draw_background(width, height, config, next_tet, score, level):
     return background
 
 
-def check_rows(dead_table, score):
+def check_rows(dead_table, score, clear_count):
     """checks for scoring rows"""
     new_table = []
     temp_score = 0
@@ -130,10 +131,11 @@ def check_rows(dead_table, score):
         if counter == len(row):
             new_table.insert(0, [0 for x in range(len(row))])
             temp_score += 10
+            clear_count += 1
         else:
             new_table.append(row)
     score += temp_score * temp_score
-    return new_table, score
+    return new_table, score, clear_count
 
 
 def draw_block(cell, config):
@@ -203,6 +205,31 @@ def collision_detector(new_position, dead_table, tet, rows, columns):
             if cell > 0 and collision_table[y_index][x_index] > 0:
                 return True
     return False
+
+
+def get_height_of_columns(dead_table, rows, columns):
+    """gets the height of the columns for the instant drop function"""
+    rotated_table = list(zip(*dead_table[::-1]))
+    column_heights = {x: 0 for x in range(columns)}
+    for column_index, column in enumerate(rotated_table):
+        if sum(column) == 0:
+            column_heights[column_index] = 0
+        else:
+            for row_index, cell in enumerate(column):
+                if cell > 0:
+                    column_heights[column_index] = row_index + 1
+    return column_heights
+
+
+def check_level(clear_count, level, speed):
+    """this sets the current level and speed"""
+    if clear_count == 10:
+        clear_count = 0
+        level += 1
+        speed -= 1
+    return clear_count, level, speed
+
+
 
 
 

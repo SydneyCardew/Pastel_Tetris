@@ -30,7 +30,7 @@ class tetronimo:
         """rotates the pattern"""
         pattern = self.absolute_pattern
         for x in range(self.rotation):
-            pattern = list(zip(*pattern[::-1])) # this line performs the matrix translation
+            pattern = list(zip(*pattern[::-1]))  # this line performs the matrix translation
         return pattern
 
     def get_sizes(self):
